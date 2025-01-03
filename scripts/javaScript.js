@@ -22,3 +22,7 @@ function getHumanChoice() {
     let humanChoice = prompt("Choose rock, paper or scissors").toLowerCase();
     return humanChoice;
 }
+
+// initialise variable to keep scores
+let humanScore = 0;
+let computerScore = 0;
