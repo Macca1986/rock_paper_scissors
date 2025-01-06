@@ -15,59 +15,76 @@ function getComputerChoice() {
     }
 }
 
-// logic to get the human player choice
+// logic to get the human player choice from buttons
 function getHumanChoice() {
     let humanChoice = prompt("Choose rock, paper or scissors").toLowerCase();
     return humanChoice;
 }
 
+// initialise variables to keep score
+let humanScore = 0;
+let computerScore = 0;
 
-
-// write logic to play 5 rounds of the game
-function playGame() {
-    // initialise variable to keep scores
-    let humanScore = 0;
-    let computerScore = 0;
-
-    // write logic to play a single round
-    function playRound(humanChoice, computerChoice) {
-        if (humanChoice == computerChoice) {
-        console.log("It's a draw! You both chose " + humanChoice);
-        } else if (humanChoice == "rock" && computerChoice == "scissors") {
-        console.log("You win! " + humanChoice + " beats " + computerChoice);
-        humanScore += 1;
-        } else if (humanChoice == "rock" && computerChoice == "paper") {
-        console.log("You lose! " + computerChoice + " beats " + humanChoice);
-        computerScore += 1;
-        } else if (humanChoice == "paper" && computerChoice == "rock") {
-        console.log("You win! " + humanChoice + " beats " + computerChoice);
-        humanScore += 1;
-        } else if (humanChoice == "paper" && computerChoice == "scissors") {
-        console.log("You lose! " + computerChoice + " beats " + humanChoice);
-        computerScore += 1;
-        } else if (humanChoice == "scissors" && computerChoice == "paper") {
-        console.log("You win! " + humanChoice + " beats " + computerChoice);
-        humanScore += 1;
-        } else if (humanChoice == "scissors" && computerChoice == "rock") {
-        console.log("You lose! " + computerChoice + " beats " + humanChoice);
-        computerScore += 1;
-        }
-        console.log("The score is Human: " + humanScore + " to Computer: " + computerScore);
-    }
-
-    // play the game 5 times, prompting for user and computer choices each round
-    for (let i = 0; i < 5; i++) {
-        let humanSelection = getHumanChoice();
-        let computerSelection = getComputerChoice();
-        playRound(humanSelection, computerSelection);
-    }
-    
-    // display result message after 5 rounds are complete
-    if (humanScore > computerScore) {
-        console.log("Congratulations, you win!");
-    } else if (computerScore > humanScore) {
-        console.log("Sorry, you lose!");
-    } else {
-        console.log("It's a draw!");
+// write logic to play a single round
+function playRound(humanChoice, computerChoice) {
+    if (humanChoice == computerChoice) {
+    } else if (humanChoice == "rock" && computerChoice == "scissors") {
+    humanScore += 1;
+    } else if (humanChoice == "rock" && computerChoice == "paper") {
+    computerScore += 1;
+    } else if (humanChoice == "paper" && computerChoice == "rock") {
+    humanScore += 1;
+    } else if (humanChoice == "paper" && computerChoice == "scissors") {
+    computerScore += 1;
+    } else if (humanChoice == "scissors" && computerChoice == "paper") {
+    humanScore += 1;
+    } else if (humanChoice == "scissors" && computerChoice == "rock") {
+    computerScore += 1;
     }
 }
+
+// logic to update scores
+const playerScoreDisplay = document.querySelector("#player-score");
+const computerScoreDisplay = document.querySelector("#computer-score");
+
+function setScores() {
+    playerScoreDisplay.textContent = humanScore;
+    computerScoreDisplay.textContent = computerScore;
+}
+
+// logic to set winner message
+const winnerMessage = document.querySelector("#result");
+
+function displayWinner() {
+    if (humanScore >= 5) {
+        winnerMessage.textContent = "Congratulations, you win!";
+    } else if (computerScore >=5) {
+        winnerMessage.textContent = "Sorry, you lose!"
+    };
+}
+
+// add event listeners to the buttons
+const rockBtn = document.querySelector("#rock-btn");
+const paperBtn = document.querySelector("#paper-btn");
+const scissorsBtn = document.querySelector("#scissors-btn");
+
+rockBtn.addEventListener("click", function (e) {
+    computerChoice = getComputerChoice();
+    playRound("rock", computerChoice);
+    setScores();
+    displayWinner();
+});
+
+paperBtn.addEventListener("click", function (e) {
+    computerChoice = getComputerChoice();
+    playRound("paper", computerChoice);
+    setScores();
+    displayWinner();
+});
+
+scissorsBtn.addEventListener("click", function (e) {
+    computerChoice = getComputerChoice();
+    playRound("scissors", computerChoice);
+    setScores();
+    displayWinner();
+});
