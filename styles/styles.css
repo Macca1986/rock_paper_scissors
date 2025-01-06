@@ -1,0 +1,96 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+div {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+}
+
+h1 {
+    font-size: 60px;
+}
+
+h2 {
+    font-size: 40px;
+}
+
+.header, .btn-div, .scores-div, .result-div {
+    margin: 20px 0px
+}
+
+.header, .btn-div {
+    margin-bottom: 40px;
+}
+
+button {
+    height: 80px;
+    width: 200px;
+    border-radius: 20px;
+    border: 2px solid black;
+    font-size: 25px;
+}
+
+#rock-btn {
+    background-color: #780000;
+    color: white;
+}
+
+#paper-btn {
+    background-color: #fdf0d5;
+}
+
+#scissors-btn {
+    background-color: #003049;
+    color: white;
+}
+
+.scoreboard, .btn-div {
+    justify-content: space-evenly;
+}
+
+.scores-div, .score-tracker {
+    flex-direction: column;
+}
+
+.score-tracker {
+    font-size: 40px;
+}
+
+.vs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#player-score, #computer-score {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 100px;
+    border: 2px solid black;
+    border-radius: 20px;
+    width: 200px;
+    height: 200px;
+}
+
+#player-score {
+    background-color: #cdeac0;
+    margin-top: 20px;
+}
+
+#computer-score {
+    background-color: #fec3a6;
+    margin-top: 20px;
+}
+
+.result-div {
+    margin-top: 40px;
+}
+
+.scores-header {
+    margin-bottom: 30px;
+}
