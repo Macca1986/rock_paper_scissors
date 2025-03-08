@@ -1,90 +1,137 @@
-// create function that gets the computers choice
-function getComputerChoice() {
-    let randNum = Math.random();
-    // console.log(randNum);
-    // multiply by three for choosing from the three options
-    let choiceNum = randNum * 3;
-    // console.log(choiceNum);
-    // choose rock paper or scissors based on the above using conditionals
-    if (choiceNum < 1) {
-        return "rock";
-    } else if (choiceNum < 2) {
-        return "paper";
-    } else {
-        return "scissors";
-    }
-}
+// Sound effects
+const sounds = {
+    win: new Audio('path/to/win.mp3'),
+    lose: new Audio('path/to/lose.mp3')
+};
 
-// logic to get the human player choice from buttons
-function getHumanChoice() {
-    let humanChoice = prompt("Choose rock, paper or scissors").toLowerCase();
-    return humanChoice;
-}
-
-// initialise variables to keep score
+// Game state
 let humanScore = 0;
 let computerScore = 0;
+let isGameOver = false;
+let gameHistory = [];
 
-// write logic to play a single round
-function playRound(humanChoice, computerChoice) {
-    if (humanChoice == computerChoice) {
-    } else if (humanChoice == "rock" && computerChoice == "scissors") {
-    humanScore += 1;
-    } else if (humanChoice == "rock" && computerChoice == "paper") {
-    computerScore += 1;
-    } else if (humanChoice == "paper" && computerChoice == "rock") {
-    humanScore += 1;
-    } else if (humanChoice == "paper" && computerChoice == "scissors") {
-    computerScore += 1;
-    } else if (humanChoice == "scissors" && computerChoice == "paper") {
-    humanScore += 1;
-    } else if (humanChoice == "scissors" && computerChoice == "rock") {
-    computerScore += 1;
+// DOM Elements
+const playerScoreDisplay = document.querySelector("#player-score");
+const computerScoreDisplay = document.querySelector("#computer-score");
+const winnerMessage = document.querySelector("#result");
+const playerChoiceDisplay = document.querySelector("#player-choice");
+const computerChoiceDisplay = document.querySelector("#computer-choice");
+const historyList = document.querySelector("#history-list");
+const resetBtn = document.querySelector("#reset-btn");
+
+// Get computer's choice
+function getComputerChoice() {
+    const choices = ["rock", "paper", "scissors"];
+    return choices[Math.floor(Math.random() * 3)];
+}
+
+// Update choice indicators
+function updateChoiceIndicators(playerChoice, computerChoice) {
+    const choiceIcons = {
+        rock: "fa-hand-rock",
+        paper: "fa-hand-paper",
+        scissors: "fa-hand-scissors"
+    };
+
+    playerChoiceDisplay.innerHTML = `<i class="fas ${choiceIcons[playerChoice]}"></i>`;
+    computerChoiceDisplay.innerHTML = `<i class="fas ${choiceIcons[computerChoice]}"></i>`;
+
+    playerChoiceDisplay.classList.add("active");
+    computerChoiceDisplay.classList.add("active");
+}
+
+// Add round to history
+function addToHistory(playerChoice, computerChoice, result) {
+    const historyItem = document.createElement("div");
+    historyItem.className = "history-item";
+    historyItem.innerHTML = `
+        <i class="fas fa-hand-${playerChoice}"></i>
+        vs
+        <i class="fas fa-hand-${computerChoice}"></i>
+        - ${result}
+    `;
+    historyList.insertBefore(historyItem, historyList.firstChild);
+    if (historyList.children.length > 5) {
+        historyList.removeChild(historyList.lastChild);
     }
 }
 
-// logic to update scores
-const playerScoreDisplay = document.querySelector("#player-score");
-const computerScoreDisplay = document.querySelector("#computer-score");
+// Play a single round
+function playRound(playerChoice, computerChoice) {
+    if (isGameOver) return;
 
+    updateChoiceIndicators(playerChoice, computerChoice);
+
+    let result = "";
+    if (playerChoice === computerChoice) {
+        result = "Tie!";
+    } else if (
+        (playerChoice === "rock" && computerChoice === "scissors") ||
+        (playerChoice === "paper" && computerChoice === "rock") ||
+        (playerChoice === "scissors" && computerChoice === "paper")
+    ) {
+        humanScore++;
+        result = "You win this round!";
+    } else {
+        computerScore++;
+        result = "Computer wins this round!";
+    }
+
+    addToHistory(playerChoice, computerChoice, result);
+    setScores();
+    checkWinner();
+}
+
+// Update scores
 function setScores() {
     playerScoreDisplay.textContent = humanScore;
     computerScoreDisplay.textContent = computerScore;
+
+    // Add animation to the score that changed
+    playerScoreDisplay.style.transform = "scale(1.2)";
+    computerScoreDisplay.style.transform = "scale(1.2)";
+    setTimeout(() => {
+        playerScoreDisplay.style.transform = "scale(1)";
+        computerScoreDisplay.style.transform = "scale(1)";
+    }, 200);
 }
 
-// logic to set winner message
-const winnerMessage = document.querySelector("#result");
-
-function displayWinner() {
-    if (humanScore >= 5) {
-        winnerMessage.textContent = "Congratulations, you win!";
-    } else if (computerScore >=5) {
-        winnerMessage.textContent = "Sorry, you lose!"
-    };
+// Check for winner
+function checkWinner() {
+    if (humanScore >= 5 || computerScore >= 5) {
+        isGameOver = true;
+        if (humanScore >= 5) {
+            winnerMessage.textContent = "🎉 Congratulations, you win! 🎉";
+            sounds.win.play();
+        } else {
+            winnerMessage.textContent = "😔 Game Over - Computer wins! 😔";
+            sounds.lose.play();
+        }
+        resetBtn.style.display = "block";
+    }
 }
 
-// add event listeners to the buttons
-const rockBtn = document.querySelector("#rock-btn");
-const paperBtn = document.querySelector("#paper-btn");
-const scissorsBtn = document.querySelector("#scissors-btn");
-
-rockBtn.addEventListener("click", function (e) {
-    computerChoice = getComputerChoice();
-    playRound("rock", computerChoice);
+// Reset game
+function resetGame() {
+    humanScore = 0;
+    computerScore = 0;
+    isGameOver = false;
+    gameHistory = [];
+    historyList.innerHTML = "";
     setScores();
-    displayWinner();
-});
+    winnerMessage.textContent = "First to 5 Wins!";
+    resetBtn.style.display = "none";
+    playerChoiceDisplay.innerHTML = '<i class="fas fa-question"></i>';
+    computerChoiceDisplay.innerHTML = '<i class="fas fa-question"></i>';
+    playerChoiceDisplay.classList.remove("active");
+    computerChoiceDisplay.classList.remove("active");
+}
 
-paperBtn.addEventListener("click", function (e) {
-    computerChoice = getComputerChoice();
-    playRound("paper", computerChoice);
-    setScores();
-    displayWinner();
-});
+// Event Listeners
+document.querySelector("#rock-btn").addEventListener("click", () => playRound("rock", getComputerChoice()));
+document.querySelector("#paper-btn").addEventListener("click", () => playRound("paper", getComputerChoice()));
+document.querySelector("#scissors-btn").addEventListener("click", () => playRound("scissors", getComputerChoice()));
+resetBtn.addEventListener("click", resetGame);
 
-scissorsBtn.addEventListener("click", function (e) {
-    computerChoice = getComputerChoice();
-    playRound("scissors", computerChoice);
-    setScores();
-    displayWinner();
-});
+// Initialize
+resetBtn.style.display = "none";

@@ -5,16 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rock Paper Scissors JavaScript</title>
     <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="scripts/javaScript.js" defer></script>
 </head>
 <body>
     <div class="header">
         <h1>Rock Paper Scissors!</h1>
     </div>
+    <div class="choice-indicators">
+        <div class="score-tracker">
+            <div class="choice-indicator" id="player-choice">
+                <i class="fas fa-question"></i>
+            </div>
+            <h3>Your Choice</h3>
+        </div>
+        <div class="vs">
+            <h2>VS</h2>
+        </div>
+        <div class="score-tracker">
+            <div class="choice-indicator" id="computer-choice">
+                <i class="fas fa-question"></i>
+            </div>
+            <h3>Computer's Choice</h3>
+        </div>
+    </div>
     <div class="btn-div">
-        <button id="rock-btn">Rock</button>
-        <button id="paper-btn">Paper</button>
-        <button id="scissors-btn">Scissors</button>
+        <button id="rock-btn"><i class="fas fa-hand-rock"></i> Rock</button>
+        <button id="paper-btn"><i class="fas fa-hand-paper"></i> Paper</button>
+        <button id="scissors-btn"><i class="fas fa-hand-scissors"></i> Scissors</button>
     </div>
     <div class="scores-div">
         <div class="scores-header">
@@ -36,6 +54,11 @@
     </div>
     <div class="result-div">
         <h2 id="result">First to 5 Wins!</h2>
+        <button id="reset-btn"><i class="fas fa-redo"></i> Play Again</button>
+    </div>
+    <div class="history-div">
+        <h2>Game History</h2>
+        <div id="history-list"></div>
     </div>
 </body>
 </html>
